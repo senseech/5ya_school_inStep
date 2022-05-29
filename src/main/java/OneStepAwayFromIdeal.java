@@ -14,8 +14,7 @@ public class OneStepAwayFromIdeal {
         byte[] inputBuffer = new byte[fileInputStream.available()];
         fileInputStream.read(inputBuffer, 0, fileInputStream.available());
         ArrayList<Character> arrayChars = new ArrayList();
-        for (int i = 0; i < inputBuffer.length; i++)
-            arrayChars.add((char)(inputBuffer[i]));
+        for (byte b : inputBuffer) arrayChars.add((char) b);
 
 
 
@@ -24,59 +23,28 @@ public class OneStepAwayFromIdeal {
 
 
 
-
-
-
-
-
+        System.out.println(CheckString(arrayChars));
         arrayChars.forEach(System.out::print);
-
-
-
-
-//        char[] strChars = new char[inputBuffer.length];
-//        for (int i = 0; i < inputBuffer.length; i++)
-//            strChars[i] = (char)(inputBuffer[i]);
-//
-//        strChars.
-//
-//        Arrays.stream(strChars).findFirst("(");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        System.out.println();
     }
-    public int CheckString(ArrayList<Character> arrayList){
-        final int[] countBrackets = {0,0,0};
-        boolean check = false;
+    //хреновый поиск
+    //не ищет )()(
+    //Вроде ищет
+    public static int CheckString(ArrayList<Character> arrayList){
+        int[] countBrackets = {0,0,0};
+        boolean checkSide = false;
+        boolean[] checkBrackets = {false, false, false};
         if (arrayList.contains("=")){
             arrayList.forEach(ch ->{
-                if (!check){
+                if (!checkSide){
                     if (ch.equals("(")) countBrackets[0]++;
                     if (ch.equals(")")) countBrackets[0]--;
+                    if (countBrackets[0] < 0) checkBrackets[0] = true;
                 }
                 else {
                     if (ch.equals("(")) countBrackets[1]++;
                     if (ch.equals(")")) countBrackets[1]--;
+                    if (countBrackets[1] < 0) checkBrackets[1] = true;
                 }
             });
         }
@@ -84,10 +52,15 @@ public class OneStepAwayFromIdeal {
             arrayList.forEach(ch -> {
                 if (ch.equals("(")) countBrackets[2]++;
                 if (ch.equals(")")) countBrackets[2]--;
+                if (countBrackets[2] < 0) checkBrackets[2] = true;
             });
         }
+        if ((Arrays.equals(countBrackets, new int[]{0, 0, 0})) &
+                (Arrays.equals(checkBrackets, new boolean[]{false, false, false}))){
+            return 1;
+        }
+        else
+            return 0;
 
-
-        return 1;
     }
 }
